@@ -1,9 +1,16 @@
-
+import "./assets/style/main.css";
+import ActionBar from "./components/ActionBar";
+import DraggableGalleryContainer from "./components/DraggableGalleryContainer";
+import StateProvider from "./context/Store";
 function App() {
   return (
-    <>
-      <div>gallery</div>
-    </>
+    <StateProvider>
+      <div className="container">
+        <ActionBar />
+        {/* <DaraggableImages /> */}
+        <DraggableGalleryContainer />
+      </div>
+    </StateProvider>
   );
 }
 
