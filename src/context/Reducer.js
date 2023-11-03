@@ -25,9 +25,12 @@ const galleryReducer = (state, action) => {
       };
     }
     case "DRAG_IMG": {
+      const dragIndex = state.imagesList.findIndex(item => item.key === action.payload.dragKey)
+      const dropIndex = state.imagesList.findIndex(item => item.key === action.payload.dropKey)
+      console.log(dragIndex, dropIndex)
       const updatedImages = [...state.imagesList];
-      const [draggedImage] = updatedImages.splice(action.payload.dragIndex, 1);
-      updatedImages.splice(action.payload.dropIndex, 0, draggedImage);
+      const [draggedImage] = updatedImages.splice(dragIndex, 1);
+      updatedImages.splice(dropIndex, 0, draggedImage);
       return {
         ...state,
         imagesList: updatedImages,
