@@ -10,8 +10,7 @@ const AddImage = () => {
     inputFile.current.click();
   };
 
-  function handleFileSelect(event) {
-    const file = event[0];
+  function handleFileSelect(file) {
     const newImageObj = {
       key: Date.now(),
       img: URL.createObjectURL(file),
@@ -27,7 +26,7 @@ const AddImage = () => {
 
   return (
     <div className={style.add_img_container} onClick={onButtonClick}>
-      <img src={addPhotoIcon} alt="" />
+      <img src={addPhotoIcon} alt="add images icon" />
       <p>Add Images</p>
       <input
         type="file"
@@ -37,7 +36,7 @@ const AddImage = () => {
         style={{ display: "none" }}
         onChange={(e) => {
           if (e.target.files?.[0]) {
-            handleFileSelect(e.target.files);
+            handleFileSelect(e.target.files[0]);
           }
         }}
       />

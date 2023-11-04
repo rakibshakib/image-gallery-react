@@ -22,9 +22,9 @@ const ActionBar = () => {
             value={true}
             checked
             onChange={() => {
-              dispatch({
-                type: "UNSELECT_ALL_IMG",
-              });
+              // dispatch({
+              //   type: "UNSELECT_ALL_IMG",
+              // });
             }}
           />
           {

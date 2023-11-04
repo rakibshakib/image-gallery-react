@@ -7,7 +7,6 @@ function App() {
     <StateProvider>
       <div className="container">
         <ActionBar />
-        {/* <DaraggableImages /> */}
         <DraggableGalleryContainer />
       </div>
     </StateProvider>

@@ -1,34 +1,37 @@
+import { useStateContext } from "../../context/context";
+import AddImage from "./AddImage";
+import { useState } from "react";
+import PhotoLayout from "../PhotoLayout";
+import SinglePhoto from "../PhotoLayout/SinglePhoto";
 import {
   DndContext,
-  DragOverlay,
+  closestCenter,
   MouseSensor,
   TouchSensor,
+  DragOverlay,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { useStateContext } from "../../context/context";
-import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
-import SingleImage from "../singleImage/SingleImage";
-import AddImage from "./AddImage";
-import { useState } from "react";
-import Image from "../singleImage/Image";
+import {
+  //   arrayMove,
+  SortableContext,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import GridBox from "../GridBox";
 
 const DraggableGalleryContainer = () => {
   const {
     state: { imagesList },
     dispatch,
   } = useStateContext();
-  const [activeId, setActiveId] = useState(null);
-
+  const [currentImage, setCurrentImage] = useState(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-  console.log({ imagesList });
 
   const onDragStartHandler = (event) => {
-    // console.log({ event });
-    // setActiveId(event.active.id);
     const findImage = imagesList.find((item) => item.key === event.active.id);
-    setActiveId(findImage);
+    setCurrentImage(findImage);
   };
+
   const onDragEndHandler = (active, over) => {
     if (active?.id !== over?.id) {
       dispatch({
@@ -41,36 +44,42 @@ const DraggableGalleryContainer = () => {
     } else {
       return;
     }
+    setCurrentImage(null);
   };
+
+  console.log({ imagesList });
 
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={closestCenter}
       onDragStart={onDragStartHandler}
       onDragEnd={({ active, over }) => onDragEndHandler(active, over)}
+      onDragCancel={() => setCurrentImage(null)}
     >
       <SortableContext items={imagesList} strategy={rectSortingStrategy}>
-        <div className="galaryContainer">
-          <div className="grid-layout">
-            {imagesList?.map((images, index) => (
-                // <SingleImage key={images.key} images={images} index={index} />
-              <Image key={images.key} images={images} index={index} />
-            ))}
-            <div
-              className={
-                !imagesList.length > 0
-                  ? `grid-item-1 add-image`
-                  : `grid-item-${imagesList?.length + 1} add-image`
-              }
-            >
-              <AddImage />
-            </div>
+        <GridBox columns={5}>
+          {imagesList?.map((images, index) => (
+            <PhotoLayout key={images.key} images={images} index={index} />
+          ))}
+          <div
+            className={
+              !imagesList.length > 0
+                ? `grid-item-1 add-image`
+                : `grid-item-${imagesList?.length + 1} add-image`
+            }
+          >
+            <AddImage />
           </div>
-        </div>
+        </GridBox>
       </SortableContext>
       <DragOverlay adjustScale={true}>
-        {activeId ? (
-          <Image images={activeId} index={imagesList.indexOf(activeId.key)} />
+        {currentImage ? (
+          <SinglePhoto
+            images={currentImage}
+            index={imagesList.indexOf(currentImage.key)}
+            isDraggingImages={true}
+          />
         ) : null}
       </DragOverlay>
     </DndContext>
