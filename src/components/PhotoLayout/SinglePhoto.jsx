@@ -38,7 +38,6 @@ const SinglePhoto = forwardRef(
       backgroundSize: "cover",
       backgroundPosition: "center",
       borderRadius: "8px",
-    //   padding: "5px",
       ...style,
     };
     const checkBoxStyle = {
